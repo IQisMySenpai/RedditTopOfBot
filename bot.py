@@ -5,13 +5,14 @@ from secret import TOKEN
 import asyncio
 import requests
 import random
+import datetime
 
 bot = commands.Bot(command_prefix='$')
 
 running = False
 posted_posts = []
 size_limit = 60  # max of 100 from reddit API
-retain_size_limit = 100  # max size of posted_posts list (may be bigger due to the tiem delay between the posts)
+retain_size_limit = 100  # max size of posted_posts list (may be bigger due to the time delay between the posts)
 
 debugging = False
 
@@ -41,12 +42,21 @@ async def posting_loop(ctx, time_span: str = "week", subreddit: str = "Programme
     """
 
     global posted_posts
+    last_post = datetime.datetime.now()
 
     while running:
-        response = await get_first_img_url(ctx, f"https://www.reddit.com/r/{subreddit}/top/.json?t={time_span}&limit={size_limit}")
+        current_time = datetime.datetime.now()
+        delta = current_time - last_post
 
-        await ctx.send(response)
-        await asyncio.sleep(interval)
+        if delta.seconds > interval:
+            response = await get_first_img_url(ctx,
+                                               f"https://www.reddit.com/r/{subreddit}/top/.json?t="
+                                               f"{time_span}&limit={size_limit}")
+
+            await ctx.send(response)
+            last_post = current_time
+
+        await asyncio.sleep(5)
 
 
 async def get_first_img_url(ctx, href: str = f"https://www.reddit.com/r/funny/top/.json?t=hour&limit={size_limit}"):
@@ -136,13 +146,13 @@ async def get_image(ctx, subreddit: str = "funny", time_span: str = "hour"):
 
 
 @bot.command(name='startRepeat', help='Starts a loop that sends the top post of a given time interval in a subreddit to the text channel.')
-async def start_post_repeat(ctx, freqhours: int = 24, subreddit: str = "funny", time_span: str = "hour"):
+async def start_post_repeat(ctx, freq_sec: int = 86400, subreddit: str = "funny", time_span: str = "hour"):
     """
     Function starts a loop which sends the top post of a given subreddit to the discord channel.
 
     :param ctx: context of the command to which the bot is responding
     :param subreddit: subreddit to take post from
-    :param freqhours: frequency in hours, how often a post is supposed to be sent
+    :param freq_sec: frequency in seconds, how often a post is supposed to be sent
     :param time_span: Reddit time interval of which to take the top posts
 
     :return:
@@ -154,13 +164,13 @@ async def start_post_repeat(ctx, freqhours: int = 24, subreddit: str = "funny", 
         await ctx.send(f"Not supported time_span, only {('hour', 'day', 'week', 'month', 'year', 'all')} supported")
         return None
 
-    if freqhours < 1/60.0:
-        await ctx.send(f"To small of a freqhours given, minimum is {1/60.0}")
+    if freq_sec <= 60:
+        await ctx.send(f"To small of a freq_sec given, minimum is {60}")
         return None
 
     running = True
 
-    out = bot.loop.create_task(posting_loop(ctx, time_span=time_span, subreddit=subreddit, interval=freqhours * 3600))
+    out = bot.loop.create_task(posting_loop(ctx, time_span=time_span, subreddit=subreddit, interval=freq_sec))
     poc(f"out of create_task {out}")
     poc("Created loop")
 
@@ -176,6 +186,11 @@ async def stop_post_repeat(ctx):
     global running
     poc('Stopping Loop...')
     running = False
+
+
+@bot.command(name='version', help='Returns Current Version')
+async def version(ctx):
+    await ctx.send("Current Version: 1.6")
 
 
 bot.run(TOKEN)
