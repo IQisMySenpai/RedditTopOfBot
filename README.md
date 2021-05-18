@@ -61,7 +61,7 @@ You should have already installed python and create a discord bot with the token
    nano secret.py
    ```
 3. Put your token in following code 'TOKEN = "TOKEN GOES HERE"' then save and exit.
-   Example of the content of the file.
+   Example of the content of the secret.py file. Make sure not to add this file to your git, since your token is a secret.
    ```sh
    TOKEN = "KSciUF702bY3brOci1E9BG24Yz0KnBS1jc30aQUw"
    ```
