@@ -33,9 +33,6 @@ So basically we needed a discord bot that fetches the top post of the week from 
 While we were programming it, we thought why not make it "potent", which resulted in a fully working, multiserver bot.
 
 
-![meme](https://www.reddit.com/r/ProgrammerHumor/comments/nhh1uw/oh_yeah/)
-
-
 ### Built With
 
 * [Python 3.9](www.python.org)
