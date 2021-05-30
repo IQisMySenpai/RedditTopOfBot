@@ -89,30 +89,29 @@ python3 bot.py
 ```
 
 Commands for RedditTopOf:
-- changePrefix *[prefix]*
-  Changes the prefix that is used in front of command.
+- changePrefix *[prefix]*\
+  Changes the prefix that is used in front of command.\
   *[prefix]* can be any text/character
-- getImage *[subreddit] [topOfTime]*
-  Fetches the top post of the given time span
-  *[subreddit] *is the subreddit you want. Can be r/name or just name.
+- getImage *[subreddit] [topOfTime]*\
+  Fetches the top post of the given time span\
+  *[subreddit]* is the subreddit you want. Can be r/name or just name.\
   *[topOfTime]* needs to be one of ('hour', 'day', 'week', 'month', 'year', 'all').
-- addInterval *[subreddit] [topOfTime] [hours] [startTime]*
-  Fetches the top post of the given time span every given hour
-  *[subreddit]* is the subreddit you want. Can be r/name or just name.
-  *[topOfTime]* needs to be one of ('hour', 'day', 'week', 'month', 'year', 'all').
-  *[hours]* how long the bot waits before sending another post. Minimum is 0.25.
-  *[startTime]* (optional) starts the Interval at a given time hh:mm. 24h format; 
-    Zero-padded (02:05); 24:00 is invalid.
-- listIntervals
+- addInterval *[subreddit] [topOfTime] [hours] [startTime]*\
+  Fetches the top post of the given time span every given hour\
+  *[subreddit]* is the subreddit you want. Can be r/name or just name.\
+  *[topOfTime]* needs to be one of ('hour', 'day', 'week', 'month', 'year', 'all').\
+  *[hours]* how long the bot waits before sending another post. Minimum is 0.25.\
+  *[startTime]* (optional) starts the Interval at a given time hh:mm. 24h format; Zero-padded (02:05); 24:00 is invalid.
+- listIntervals\
   Lists all your Intervals
-- deleteInterval *[name]*
-  Deletes a interval of guild
+- deleteInterval *[name]*\
+  Deletes a interval of guild\
   *[name]* of Interval (or * for all)
-- help
+- help\
   Prints Commands
-- fuckYou
+- fuckYou\
   Insult the bot for a funny reaction
-- version
+- version\
   Prints Version
 
 <!-- ROADMAP -->
