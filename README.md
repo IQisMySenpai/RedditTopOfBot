@@ -101,7 +101,7 @@ Commands for RedditTopOf:
   *[subreddit]* is the subreddit you want. Can be r/name or just name.\
   *[topOfTime]* needs to be one of ('hour', 'day', 'week', 'month', 'year', 'all').\
   *[hours]* how long the bot waits before sending another post. Minimum is 0.25.\
-  *[startTime]* (optional) starts the Interval at a given time hh:mm. 24h format; Zero-padded (02:05); 24:00 is invalid.
+  *[startTime]* (optional) starts the Interval at a given time hh:mm. 24h format; Zero-padded (02:05); 24:00 is invalid. UTC timezone.
 - listIntervals\
   Lists all your Intervals
 - deleteInterval *[name]*\
