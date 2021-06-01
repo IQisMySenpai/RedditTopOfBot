@@ -13,7 +13,7 @@
       <ul>
         <li><a href="#requirements">Requirements</a></li>
         <li><a href="#installation">Installation</a></li>
-        <li><a href="#hosting">hosting</a></li>
+        <li><a href="#hosting">Hosting</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
