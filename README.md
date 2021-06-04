@@ -114,9 +114,9 @@ Commands for RedditTopOf:
   *[name]* Name of the option
   *[value]* Value of the option
   Options:
-  = NSFW *[true/false]*
+  NSFW *[true/false]*
   Show NSFW content
-  = changePrefix *[text/character]*
+  changePrefix *[text/character]*
   Changes the prefix that is used in front of command
 - fuckYou\
   Insult the bot for a funny reaction
