@@ -109,6 +109,15 @@ Commands for RedditTopOf:
   *[name]* of Interval (or * for all)
 - help\
   Prints Commands
+- option *[name] [value]*
+  (Admin Only) Set server options.
+  *[name]* Name of the option
+  *[value]* Value of the option
+  Options:
+  > NSFW *[true/false]*
+    Show NSFW content
+  > changePrefix *[text/character]*
+    Changes the prefix that is used in front of command
 - fuckYou\
   Insult the bot for a funny reaction
 - version\
@@ -117,7 +126,8 @@ Commands for RedditTopOf:
 <!-- ROADMAP -->
 ## Roadmap
 
-Maybe if we are bothered we might integrate timezones, but currently we don't a F, since everything works:D
+
+Maybe if we are bothered we might integrate timezones, but currently we don't a F, since everything works:D Or we could add Video, Text and Gallery Support.
 
 
 <!-- CONTRIBUTING -->
