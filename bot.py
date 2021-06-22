@@ -19,7 +19,7 @@ f_updated = False
 size_limit = 50
 running = False
 time_spans = ('hour', 'day', 'week', 'month', 'year', 'all')
-current_version = 4.0
+current_version = 4.1
 
 debugging = False
 
@@ -226,7 +226,7 @@ async def fetch_post(guild_id, href: str = f"https://www.reddit.com/r/funny/top/
                 continue
 
             if "over_18" in content["data"].keys():
-                if content["data"]["over_18"] != nsfw:
+                if content["data"]["over_18"] and not nsfw:
                     continue
 
             img_urls.append(content["data"]["url"])
@@ -243,7 +243,6 @@ async def fetch_post(guild_id, href: str = f"https://www.reddit.com/r/funny/top/
                 response = img_urls[0]
             except IndexError as ex:
                 return f"Error: No Posts found"
-
 
         return response
 
