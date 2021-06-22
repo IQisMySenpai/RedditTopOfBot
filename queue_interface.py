@@ -29,7 +29,7 @@ def delete_intervals(connection: MongoAPI, guild_id: int, interval_id: str = "*"
     if interval_id == "*":
         status = connection.delete(col_queue, filter_dict={"guild_id": guild_id})
     else:
-        status = connection.delete_one(col_queue, filter_dict={"guild_id": guild_id, "interval_id": interval_id})
+        status = connection.delete_one(col_queue, filter_dict={"guild_id": guild_id, "interval_id": int(interval_id)})
 
     if status < 1:
         raise ConnectionError("Failed to delete from queue")
