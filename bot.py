@@ -19,7 +19,7 @@ f_updated = False
 size_limit = 50
 running = False
 time_spans = ('hour', 'day', 'week', 'month', 'year', 'all')
-current_version = 4.1
+current_version = 4.3
 
 debugging = False
 
@@ -86,6 +86,7 @@ async def on_guild_remove(guild):
 
     f_updated = True
     delete_guild(mapi, guild.id)
+    qi.delete_intervals(mapi, guild.id, "*")
 
     logging.info(f"[{guild.id}] removed from server")
 
@@ -406,7 +407,7 @@ async def add_interval(ctx, subreddit: str = "r/funny", time_span: str = "day", 
         await ctx.send(f"The subreddit r/{subreddit} does not exist")
         return None
 
-    if answer.json()['data']['over18'] != server.nsfw:
+    if answer.json()['data']['over18'] and not server.nsfw:
         await ctx.send(f"Error. The subreddit r/{subreddit} is NSFW. Please enable NSFW content on your server, "
                        f"with 'option NSFW true'")
         return None
@@ -505,7 +506,7 @@ async def list_intervals(ctx):
     response = ""
     for entry in entries:
         response += f"[{entry['interval_id']}] Searching {entry['subreddit']} top of {time_spans[entry['top_of']]} " \
-                    f"every {entry['_time_shift']} hours into {bot.get_channel(entry['channel']).name}. " \
+                    f"every {entry['time_shift']} hours into {bot.get_channel(entry['channel']).name}. " \
                     f"Next Post is at {entry['next_post_str']}\n"
     if response == "":
         await ctx.send("No Intervals found...")
