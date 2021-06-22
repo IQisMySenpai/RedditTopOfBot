@@ -127,17 +127,20 @@ class ServerInterface:
         if len(self.interval_ids) + 1 >= self.max_intervals:
             return -1
 
-        # defining new id as last number
-        new_id = len(self.interval_ids)
+        new_id = -1
 
         # checking for free smaller numbers
-        for i in self.interval_ids:
+        for i in range(len(self.interval_ids) + 1):
             if i not in self.interval_ids:
                 new_id = i
                 break
 
+        if new_id < 0:
+            return -1
+
         temp: list = self.interval_ids
         temp.append(new_id)
+        temp.sort()
         self.interval_ids = temp
 
         return new_id
