@@ -65,20 +65,20 @@ class MongoAPI:
 
         return result.inserted_id
 
-    def insert(self, collection: str, document_dict: dict = None):
+    def insert(self, collection: str, document_list: list = None):
         """
         Insert an iterable of documents.
 
         :param collection: Collection name string
-        :param document_dict:  The document to insert
+        :param document_list:  The documents to insert into the db. Needs to be a list containing doction
         :return: inserted id
         """
-        if document_dict is None:
-            document_dict = {}
+        if document_list is None:
+            document_list = []
 
         col = self.client[self.db_name][collection]
 
-        result = col.insert_many(document=document_dict)
+        result = col.insert_many(document=document_list)
 
         return result.inserted_id
 
