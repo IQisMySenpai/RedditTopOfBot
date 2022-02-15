@@ -127,7 +127,7 @@ Commands for RedditTopOf:
 ## Roadmap
 
 
-Maybe if we are bothered we might integrate timezones, but currently we don't a F, since everything works:D Or we could add Video, Text and Gallery Support.
+Maybe if we are bothered we might integrate timezones, but currently we don't a F, since everything works :D Or we could add Video, Text and Gallery Support.
 
 
 <!-- CONTRIBUTING -->
