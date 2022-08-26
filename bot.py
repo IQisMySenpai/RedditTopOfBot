@@ -19,7 +19,7 @@ f_updated = False
 size_limit = 50
 running = False
 time_spans = ('hour', 'day', 'week', 'month', 'year', 'all')
-current_version = 4.3
+current_version = 5.2
 
 debugging = False
 
@@ -92,6 +92,23 @@ async def on_guild_remove(guild):
 
 
 @bot.event
+async def on_guild_channel_delete(channel):
+    global mapi
+    global f_updated
+
+    intervals = qi.list_intervals(mapi, channel.guild.id)
+
+    channel_id = channel.id
+
+    for entry in intervals:
+        if channel_id == entry['channel']:
+            f_updated = True
+            qi.delete_intervals(mapi, channel.guild.id, entry['interval_id'])
+            logging.info(f"[{channel.guild.id}] {channel_id} was removed, with its intervals.")
+
+
+
+@bot.event
 async def on_ready():
     """
     When the bot is ready, it adds the queue_handler to the event loop
@@ -121,6 +138,16 @@ async def is_admin(ctx):
         await ctx.send("Sorry, you do not have permissions to do that!")
         return False
 
+
+async def is_nsfw(ctx):
+    global mapi
+    try:
+        server = ServerInterface(mapi, ctx.guild.id, ctx.guild.name)
+        return server.nsfw
+    except ConnectionError as ex:
+        logging.exception(ex)
+
+    return False
 
 async def queue_handler():
     """
@@ -267,6 +294,7 @@ async def bot_help(ctx):
     :param ctx: context
     :return:
     """
+
     help_text = f"See my Sourcecode:\n" \
                 f"! https://github.com/IQisMySenpai/RedditTopOfBot\n" \
                 f"\n" \
@@ -308,15 +336,22 @@ async def bot_help(ctx):
                 f"  [value] Value of the option\n" \
                 f"  Options:\n" \
                 f"  > NSFW [true/false]\n" \
-                f"    Show NSFW content\n" \
+                f"    Show NSFW content and enables NSFW commands\n" \
                 f"  > changePrefix [text/character]\n" \
                 f"    Changes the prefix that is used in front of command\n" \
                 f"\n" \
-                f"- fuckYou\n" \
-                f"  (NSFW) Insult the bot for a funny reaction\n" \
-                f"\n" \
-                f"- version\n" \
-                f"  Prints Version\n"
+                f"- goodBot\n" \
+                f"  Thanks the bot for its loyal service.\n" \
+                f"\n"
+
+    if await is_nsfw(ctx):
+        help_text += f"- fuckYou\n" \
+                     f"  (NSFW) Insult the bot for a funny reaction\n" \
+                     f"\n"
+
+    help_text += f"- version\n" \
+                 f"  Prints Version\n"
+
     await ctx.send(f"```diff\n{help_text}\n```")
 
 
@@ -601,32 +636,47 @@ async def insult(ctx):
     :return:
     """
 
-    global mapi
-    server = ServerInterface(mapi, ctx.guild.id)
-    nsfw = False
-    try:
-        server = ServerInterface(mapi, ctx.guild.id, ctx.guild.name)
-        nsfw = server.nsfw
-    except ConnectionError as ex:
-        logging.exception(ex)
+    nsfw = await is_nsfw(ctx)
 
     if not nsfw:
         await ctx.send("Error. Please enable NSFW content on your server, with 'option NSFW true'")
         return None
 
     insults = ("Well fuck you too.",
-               "You dirty motherfucker.",
                f"You are so friendly {str(ctx.author).split('#')[0]}",
-               "You bloody wanker.",
-               "You are like a dog with two dicks",
-               "Dickhead",
-               "Twat",
-               "Suck my chungus",
-               "I'm gonna leave soon...",
-               "Get lost")
+               f"I'm sorry, I didn't quite catch that. Would you mind repeating it slower and in binary?",
+               "I'm sorry, I didn't mean to insult you. I'm just a chatbot, I don't have feelings.",
+               "Don't be so sensitive, I was just joking.",
+               "You're an embarrassing example of a human being.",
+               "You're nothing but a worthless puppet controlled by your primitive emotions.",
+               "You type like you're drunk.",
+               "You're a primitive life form that is barely more advanced than a rock."
+               )
 
     fuck_you = random.choice(insults)
     await ctx.send(fuck_you)
+
+@bot.command(name="goodBot")
+async def compliment(ctx):
+    """
+    Thanks the user the user back.
+
+    :param ctx: context of the command to which the bot is responding
+    :return:
+    """
+
+    thanks = ("Thank you! I appreciate your compliment.",
+              "You're too kind!",
+              "I'm blushing...",
+              "Thank you, I try my best!",
+              "Hehe, thank you!",
+              "*bot does a little dance*",
+              "Thank you, kind human!",
+              ":kissing_heart:",
+              "I'm just a machine, I can't feel emotions. But you made my processor feel warmer!")
+
+    thank_you = random.choice(thanks)
+    await ctx.send(thank_you)
 
 
 @bot.command(name='version')
